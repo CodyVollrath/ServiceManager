@@ -1,0 +1,60 @@
+/* app/login/styles.module.css */
+
+.pageContainer {
+    min-height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+  
+  .slideContainer {
+    position: relative;
+    flex: 1;
+    display: none;
+  }
+  
+  .authContainer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: white;
+  }
+  
+  @media (min-width: 768px) {
+    .slideContainer {
+      display: block;
+    }
+  }
+  
+  .slideContent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    color: white;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .slideDots {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .slideDot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+  }
