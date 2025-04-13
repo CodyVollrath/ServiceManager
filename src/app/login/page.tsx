@@ -7,12 +7,17 @@ import './styles.css';
 
 export default function LoginPage() {
   return (
-    <div className="test h-screen w-screen flex flex-col md:flex-row">
-      <div className="hidden md:block md:w-1/2 h-full">
-        <SlideShow />
-      </div>
-      <div className="w-full md:w-1/2 bg-white">
-        <Auth />
+    <div className="h-screen flex items-center justify-center">
+      <div className="flex w-full max-w-5xl rounded-lg shadow-lg overflow-hidden">
+        {/* SlideShow Panel */}
+        <div className="flex bg-blue-500 items-center justify-center w-1/2 p-8">
+          <SlideShow />
+        </div>
+
+        {/* Auth Panel */}
+        <div className="flex bg-red-500 items-center justify-center w-1/2 p-8">
+          <Auth />
+        </div>
       </div>
     </div>
   );
