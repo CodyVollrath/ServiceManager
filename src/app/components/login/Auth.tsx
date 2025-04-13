@@ -1,5 +1,5 @@
-// components/Auth.tsx
 'use client';
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -17,132 +18,135 @@ const signupSchema = loginSchema.extend({
   name: z.string().min(2, 'Name must be at least 2 characters'),
 });
 
-type LoginInputs = z.infer<typeof loginSchema>;
-type SignupInputs = z.infer<typeof signupSchema>;
+// ---------- TYPES ----------
+// Use a single superset type so every field is safely optional/available
+// regardless of which mode we're in. This removes the TS error on `errors.name`.
+
+type FormValues = {
+  name?: string;
+  email: string;
+  password: string;
+};
 
 export default function Auth() {
-  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+  const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [showPassword, setShowPassword] = useState(false);
 
-  const loginForm = useForm<LoginInputs>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<FormValues>({
+    resolver: zodResolver(mode === 'login' ? loginSchema : signupSchema),
   });
 
-  const signupForm = useForm<SignupInputs>({
-    resolver: zodResolver(signupSchema),
-    defaultValues: { name: '', email: '', password: '' },
-  });
-
-  const handleLoginSubmit = (data: LoginInputs) => console.log('Login data:', data);
-  const handleSignupSubmit = (data: SignupInputs) => console.log('Signup data:', data);
-  const handleOAuthLogin = (provider: string) => console.log(`Login with ${provider}`);
-
-  const renderPasswordField = (register: any, error?: string) => (
-    <div className="relative">
-      <Input
-        type={showPassword ? 'text' : 'password'}
-        placeholder="Password"
-        className="w-72 pr-10"
-        {...register('password')}
-      />
-      <Button
-        type="button"
-        size="icon"
-        variant="ghost"
-        className="absolute right-0 top-1/2 -translate-y-1/2"
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-      </Button>
-      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-    </div>
-  );
+  const onSubmit = async (data: FormValues) => {
+    // TODO: Replace with real authentication request
+    await new Promise((r) => setTimeout(r, 1000));
+    console.log('Form submitted', data);
+    reset();
+  };
 
   return (
-    <div className="w-full flex justify-center">
-      <div className="authBox rounded-2xl shadow-lg p-8">
-        {/* Tabs */}
-        <div className="mb-6 flex gap-2">
-          <Button
-            variant={activeTab === 'login' ? 'default' : 'secondary'}
-            onClick={() => setActiveTab('login')}
-          >
-            Login
-          </Button>
-          <Button
-            variant={activeTab === 'signup' ? 'default' : 'secondary'}
-            onClick={() => setActiveTab('signup')}
-          >
-            Sign&nbsp;Up
-          </Button>
-        </div>
+    <div className="authBox w-full max-w-sm mx-auto p-6 rounded-2xl shadow-md bg-white">
+      <h2 className="text-2xl font-semibold text-center mb-6 capitalize">
+        {mode}
+      </h2>
 
-        {/* Forms */}
-        {activeTab === 'login' ? (
-          <form onSubmit={loginForm.handleSubmit(handleLoginSubmit)} className="space-y-4">
+      <AnimatePresence mode="wait">
+        <motion.form
+          key={mode}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.25 }}
+        >
+          {mode === 'signup' && (
+            <div>
+              <Input
+                placeholder="Name"
+                {...register('name')}
+                autoComplete="name"
+              />
+              {errors?.name && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.name.message?.toString()}
+                </p>
+              )}
+            </div>
+          )}
+
+          <div>
             <Input
-              type="email"
               placeholder="Email"
-              className="w-72"
-              {...loginForm.register('email')}
-            />
-            {loginForm.formState.errors.email && (
-              <p className="text-xs text-red-500">{loginForm.formState.errors.email.message}</p>
-            )}
-
-            {renderPasswordField(loginForm.register, loginForm.formState.errors.password?.message)}
-
-            <Button type="submit" className="w-72">
-              Login
-            </Button>
-          </form>
-        ) : (
-          <form onSubmit={signupForm.handleSubmit(handleSignupSubmit)} className="space-y-4">
-            <Input
-              type="text"
-              placeholder="Name"
-              className="w-72"
-              {...signupForm.register('name')}
-            />
-            {signupForm.formState.errors.name && (
-              <p className="text-xs text-red-500">{signupForm.formState.errors.name.message}</p>
-            )}
-
-            <Input
               type="email"
-              placeholder="Email"
-              className="w-72"
-              {...signupForm.register('email')}
+              {...register('email')}
+              autoComplete="email"
+              className='w-full'
             />
-            {signupForm.formState.errors.email && (
-              <p className="text-xs text-red-500">{signupForm.formState.errors.email.message}</p>
+            {errors?.email && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.email.message?.toString()}
+              </p>
             )}
-
-            {renderPasswordField(
-              signupForm.register,
-              signupForm.formState.errors.password?.message
-            )}
-
-            <Button type="submit" className="bg-primary hover:bg-primary-dark px-4 rounded w-72">
-              Sign&nbsp;Up
-            </Button>
-          </form>
-        )}
-
-        {/* OAuth */}
-        <div className="mt-6">
-          <p className="mb-2 text-center text-sm">Or continue with</p>
-          <div className="flex justify-center gap-4">
-            <Button variant="outline" onClick={() => handleOAuthLogin('Google')}>
-              Google
-            </Button>
-            <Button variant="outline" onClick={() => handleOAuthLogin('GitHub')}>
-              GitHub
-            </Button>
           </div>
-        </div>
-      </div>
+
+          <div className="relative">
+            <Input
+              placeholder="Password"
+              type={showPassword ? 'text' : 'password'}
+              {...register('password')}
+              autoComplete={
+                mode === 'signup' ? 'new-password' : 'current-password'
+              }
+            />
+            {errors?.password && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.password.message?.toString()}
+              </p>
+            )}
+          </div>
+
+          <Button type="submit" className="" disabled={isSubmitting}>
+            {isSubmitting
+              ? mode === 'login'
+                ? 'Logging in...'
+                : 'Creating account...'
+              : mode === 'login'
+              ? 'Login'
+              : 'Sign up'}
+          </Button>
+        </motion.form>
+      </AnimatePresence>
+
+      <p className="text-center text-sm mt-4">
+        {mode === 'login' ? (
+          <>
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={() => setMode('signup')}
+              className="text-primary underline"
+            >
+              Sign up
+            </button>
+          </>
+        ) : (
+          <>
+            Already have an account?{' '}
+            <button
+              type="button"
+              onClick={() => setMode('login')}
+              className="text-primary underline"
+            >
+              Login
+            </button>
+          </>
+        )}
+      </p>
     </div>
   );
 }

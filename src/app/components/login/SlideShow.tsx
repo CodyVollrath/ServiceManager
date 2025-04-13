@@ -51,7 +51,7 @@ export default function SlideShow({slides = defaultSlides }: {slides?: Slide[]})
       {/* 50 %–opaque black backdrop behind the text */}
       <div
         key={slides[currentSlide].id}
-        className="rounded-lg px-6 py-4 text-center text-white max-w-lg"
+        className="rounded-lg px-6 py-4 text-center text-white max-w-lg bg-primary-dark"
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: '1em'}}   
       >
         <h2 className="text-4xl font-bold mb-2">

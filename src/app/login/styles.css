@@ -1,23 +1,7 @@
-.login-container {
-  border-radius: 1%;
+.authBox {
+  margin: 4em;
 }
 
-/* .slideShow {
-  background-color: aqua;
+.authBox, input {
+  margin-bottom: 20px;
 }
-
-.authSide {
-  background-color: lightsalmon;
-} */
-
-/* app/login/styles.css */
-.tab-active {
-  border-color: #000;
-  font-weight: bold;
-}
-
-.tab-inactive {
-  border-color: transparent;
-  color: #666;
-}
-

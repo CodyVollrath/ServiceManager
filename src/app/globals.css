@@ -1,8 +1,6 @@
 
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 /* app/globals.css */
 @tailwind base;
 @tailwind components;
@@ -131,11 +129,10 @@
   }
 }
 
-
-.authBox {
-  margin: 4em;
+.activated {
+  background-color: var(--color-surface);
+  color: #61892F;
 }
-
 
 body {
   background: var(--color-surface);
@@ -150,10 +147,10 @@ body {
   box-shadow: 0 4px 14px rgba(0,0,0,.35);
 }
 
-.btn {
+button {
   background: var(--color-primary);
   border-radius: var(--radius);
-  padding: .6rem 1.25rem;
+  padding: 0.5rem 1.25rem;
   transition: var(--transition);
 }
 .btn:hover {
@@ -162,13 +159,15 @@ body {
 
 input,
 textarea {
-  background: var(--color-surface-elev);
+  background: var(--color-surface-elev) !important;
   border: 1px solid var(--color-muted);
   color: #fff;
   border-radius: var(--radius);
   padding: .55rem .9rem;
+
 }
 input:focus,
 textarea:focus {
   outline: 2px solid var(--color-primary);
 }
+
