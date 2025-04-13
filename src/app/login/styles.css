@@ -1,14 +1,14 @@
-.login-contianer {
+.login-container {
   border-radius: 1%;
 }
 
-.slideShow {
+/* .slideShow {
   background-color: aqua;
 }
 
 .authSide {
   background-color: lightsalmon;
-}
+} */
 
 /* app/login/styles.css */
 .tab-active {
@@ -21,13 +21,3 @@
   color: #666;
 }
 
-.btn-primary {
-  background-color: #000;
-  color: white;
-}
-
-.btn-secondary {
-  border: 1px solid #000;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-}
