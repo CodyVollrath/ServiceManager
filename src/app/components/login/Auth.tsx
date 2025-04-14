@@ -49,7 +49,7 @@ export default function Auth() {
   };
 
   return (
-    <div className="authBox w-full max-w-sm mx-auto p-6 rounded-2xl shadow-md bg-white">
+    <div className="w-full max-w-sm mx-auto p-6 rounded-2xl shadow-md bg-white">
       <h2 className="text-2xl font-semibold text-center mb-6 capitalize">
         {mode}
       </h2>
