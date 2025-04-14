@@ -18,10 +18,6 @@ const signupSchema = loginSchema.extend({
   name: z.string().min(2, 'Name must be at least 2 characters'),
 });
 
-// ---------- TYPES ----------
-// Use a single superset type so every field is safely optional/available
-// regardless of which mode we're in. This removes the TS error on `errors.name`.
-
 type FormValues = {
   name?: string;
   email: string;
@@ -42,14 +38,13 @@ export default function Auth() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    // TODO: Replace with real authentication request
     await new Promise((r) => setTimeout(r, 1000));
     console.log('Form submitted', data);
     reset();
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto p-6 rounded-2xl shadow-md bg-white">
+    <div className="w-full max-w-sm mx-auto p-8 rounded-2xl shadow-lg bg-gradient-to-b from-slate-800 to-gray-900 text-white">
       <h2 className="text-2xl font-semibold text-center mb-6 capitalize">
         {mode}
       </h2>
@@ -58,7 +53,7 @@ export default function Auth() {
         <motion.form
           key={mode}
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
+          className="space-y-5"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -70,9 +65,10 @@ export default function Auth() {
                 placeholder="Name"
                 {...register('name')}
                 autoComplete="name"
+                className="bg-gray-800 text-white placeholder-gray-400 border-gray-700"
               />
               {errors?.name && (
-                <p className="text-sm text-red-500 mt-1">
+                <p className="text-sm text-red-400 mt-1">
                   {errors.name.message?.toString()}
                 </p>
               )}
@@ -85,10 +81,10 @@ export default function Auth() {
               type="email"
               {...register('email')}
               autoComplete="email"
-              className='w-full'
+              className="bg-gray-800 text-white placeholder-gray-400 border-gray-700"
             />
             {errors?.email && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-red-400 mt-1">
                 {errors.email.message?.toString()}
               </p>
             )}
@@ -99,18 +95,21 @@ export default function Auth() {
               placeholder="Password"
               type={showPassword ? 'text' : 'password'}
               {...register('password')}
-              autoComplete={
-                mode === 'signup' ? 'new-password' : 'current-password'
-              }
+              autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+              className="bg-gray-800 text-white placeholder-gray-400 border-gray-700"
             />
             {errors?.password && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-red-400 mt-1">
                 {errors.password.message?.toString()}
               </p>
             )}
           </div>
 
-          <Button type="submit" className="" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-md transition-all duration-200 shadow-md"
+            disabled={isSubmitting}
+          >
             {isSubmitting
               ? mode === 'login'
                 ? 'Logging in...'
@@ -122,14 +121,14 @@ export default function Auth() {
         </motion.form>
       </AnimatePresence>
 
-      <p className="text-center text-sm mt-4">
+      <p className="text-center text-sm mt-6">
         {mode === 'login' ? (
           <>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button
               type="button"
               onClick={() => setMode('signup')}
-              className="text-primary underline"
+              className="text-blue-400 hover:underline"
             >
               Sign up
             </button>
@@ -140,7 +139,7 @@ export default function Auth() {
             <button
               type="button"
               onClick={() => setMode('login')}
-              className="text-primary underline"
+              className="text-blue-400 hover:underline"
             >
               Login
             </button>

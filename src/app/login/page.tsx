@@ -15,7 +15,7 @@ export default function LoginPage() {
         </div>
 
         {/* Auth Panel */}
-        <div className="flex items-center justify-center w-full md:w-1/2 p-8">
+        <div className="flex items-center justify-center w-full md:w-1/2 p-8 bg-gradient-to-r from-gray-400 to-slate-500">
           <Auth />
         </div>
       </div>
